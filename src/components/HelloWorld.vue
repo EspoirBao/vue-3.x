@@ -1,5 +1,6 @@
 <template>
-  <h1>{{ msg }}</h1>
+  <h1 class="text">{{ msg }}</h1>
+  <img :src="imgurl" />
 
   <p>
     <a href="https://vitejs.dev/guide/features.html" target="_blank">
@@ -9,9 +10,7 @@
     <a href="https://v3.vuejs.org/" target="_blank">Vue 3 Documentation</a>
   </p>
 
-  <button type="button" @click="state.count++">
-    count is: {{ state.count }}
-  </button>
+  <button type="button" @click="click">count is: {{ state.count }}</button>
   <p>
     Edit
     <code>components/HelloWorld.vue</code> to test hot module replacement.
@@ -32,11 +31,24 @@ import {
   onDeactivated,
   onErrorCaptured,
   onRenderTriggered,
+  ref,
 } from "vue";
-defineProps({
+import img from "../assets/logo.png";
+const imgurl = ref(img);
+
+const emit = defineEmit(["change"]);
+
+const props = defineProps({
   // vue3Props
   msg: String,
+  data: Object,
 });
+const active = ref("red");
+const click = () => {
+  state.count++;
+  active.value = "green";
+  emit("change", 123123);
+};
 
 // vue3生命周期钩子
 onBeforeMount(() => {
@@ -44,6 +56,8 @@ onBeforeMount(() => {
 });
 onMounted(() => {
   console.log("onMounted");
+  console.log("父组件传过来的props" + props.data);
+  props.data.one = "2";
 });
 onBeforeUpdate(() => {
   console.log("onBeforeUpdate");
@@ -68,7 +82,6 @@ onErrorCaptured(() => {
 });
 
 onRenderTriggered((e) => {
-  debugger;
   // 检查哪个依赖项导致组件重新呈现
   console.log("onErrorCaptured");
 });
@@ -76,8 +89,12 @@ onRenderTriggered((e) => {
 const state = reactive({ count: 0 });
 </script>
 
-<style scoped>
+<style lang="scss"  scoped>
 a {
   color: #42b983;
+}
+
+.text {
+  color: v-bind("active");
 }
 </style>

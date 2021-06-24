@@ -3,7 +3,12 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/login">Lgoin</router-link>
   </div>
-  <router-view />
+
+  <router-view v-slot="{ Component }">
+    <keep-alive>
+      <component :is="Component" />
+    </keep-alive>
+  </router-view>
 </template>
 
 <script setup>

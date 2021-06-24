@@ -32,8 +32,12 @@ import {
   onErrorCaptured,
   onRenderTriggered,
   ref,
+  getCurrentInstance,
 } from "vue";
 import img from "../assets/logo.png";
+
+const { proxy } = getCurrentInstance();
+
 const imgurl = ref(img);
 
 const emit = defineEmit(["change"]);
@@ -50,41 +54,47 @@ const click = () => {
   emit("change", 123123);
 };
 
+const test = () => {
+  console.log(proxy.$foo);
+};
+
 // vue3生命周期钩子
 onBeforeMount(() => {
+  test();
   console.log("onBeforeMount");
 });
 onMounted(() => {
   console.log("onMounted");
-  console.log("父组件传过来的props" + props.data);
+  console.log(proxy.$foo);
+  // console.log("父组件传过来的props" + props.data);
   props.data.one = "2";
 });
-onBeforeUpdate(() => {
-  console.log("onBeforeUpdate");
-});
-onUpdated(() => {
-  console.log("onUpdated");
-});
-onBeforeUnmount(() => {
-  console.log("onBeforeUnmount");
-});
-onUnmounted(() => {
-  console.log("onUnmounted");
-});
-onActivated(() => {
-  console.log("onActivated");
-});
-onDeactivated(() => {
-  console.log("onDeactivated");
-});
-onErrorCaptured(() => {
-  console.log("onErrorCaptured");
-});
+// onBeforeUpdate(() => {
+//   console.log("onBeforeUpdate");
+// });
+// onUpdated(() => {
+//   console.log("onUpdated");
+// });
+// onBeforeUnmount(() => {
+//   console.log("onBeforeUnmount");
+// });
+// onUnmounted(() => {
+//   console.log("onUnmounted");
+// });
+// onActivated(() => {
+//   console.log("onActivated");
+// });
+// onDeactivated(() => {
+//   console.log("onDeactivated");
+// });
+// onErrorCaptured(() => {
+//   console.log("onErrorCaptured");
+// });
 
-onRenderTriggered((e) => {
-  // 检查哪个依赖项导致组件重新呈现
-  console.log("onErrorCaptured");
-});
+// onRenderTriggered((e) => {
+//   // 检查哪个依赖项导致组件重新呈现
+//   console.log("onErrorCaptured");
+// });
 
 const state = reactive({ count: 0 });
 </script>
